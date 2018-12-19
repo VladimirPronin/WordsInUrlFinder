@@ -8,48 +8,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordsUrlFinder {
+  public static final Pattern WORD_PATTERN = Pattern.compile("\\w+[а-яА-Я]", Pattern.UNICODE_CHARACTER_CLASS | Pattern.UNICODE_CHARACTER_CLASS);
 
-    private static String streameString;
-
-    public static void main(String[] args) throws IOException {
-// create Strims and StringBuilder
-      StringBuilder sb = new StringBuilder();
-      BufferedReader bf = new BufferedReader(new InputStreamReader(new URL("https://habr.com/post/190548/").openStream()));
-      BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("E:\\Sample3.txt"))));
-      String note;
-//    Write Stream
-      while ((note = bf.readLine()) != null) {
-        sb.append(bf.readLine());
-      }
-//    Form String from stream
-      String book = sb.toString();
-//
-      char[] cyrillic = new char[book.toCharArray().length];
-      for (int i = 0; i < book.toCharArray().length; i++) {
-        if (Character.UnicodeBlock.of(book.toCharArray()[i]).equals(Character.UnicodeBlock.CYRILLIC)) {
-          cyrillic[i] = book.toCharArray()[i];
+  public static void main(String[] args) throws IOException {
+    // create Strims and StringBuilder
+    StringBuilder sb = new StringBuilder();
+    try
+            (BufferedReader inPut = new BufferedReader(new InputStreamReader(new URL("https://habr.com/post/190548/").openStream()))) {
+      try
+              (BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("E:\\Sample3.txt"))))) {
+        String note;
+        //    Write Stream
+        while ((note = inPut.readLine()) != null) {
+          sb.append(note);
         }
+        //    Use pattern to sort
+        Matcher matcher = WORD_PATTERN.matcher(sb);
+        // forget about similar words
+        SortedSet<String> words = new TreeSet<>();
+        while (matcher.find()) {
+          words.add(matcher.group());
+        }
+        for (String word : words) {
+          System.out.println("word = " + word);
+          outPut.write("Word = " + word + "\n");
+        }
+        //    We don't need close streams, because use try-with-resources. Java 7 and above
       }
-      streameString = String.copyValueOf(cyrillic);
-//Search for unique words / formating strings
-      Pattern pattern = Pattern.compile("\\w+", Pattern.UNICODE_CHARACTER_CLASS | Pattern.UNICODE_CHARACTER_CLASS);
-// create "sorter"
-      Matcher matcher = pattern.matcher(streameString);
-      // forget about similar words
-      SortedSet<String> words = new TreeSet<>();
-      while (matcher.find())
-        words.add(matcher.group());
-      for (String word : words)
-        System.out.println("word = " + word);
-      outPut.write(String.valueOf(words));
-
-//    Close Streams
-      bf.close();
-      outPut.close();
-
     }
-
   }
+}
+
+
 
 
 
