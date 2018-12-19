@@ -16,9 +16,8 @@ public class WordsUrlFinder {
     // create Strims and StringBuilder
     StringBuilder sb = new StringBuilder();
     try
-            (BufferedReader inPut = new BufferedReader(new InputStreamReader(new URL(pageAddress).openStream()))) {
-      try
-              (BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath))))) {
+            (BufferedReader inPut = new BufferedReader(new InputStreamReader(new URL(pageAddress).openStream()));
+              BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath))))){
         String note;
         //    Write Stream
         while ((note = inPut.readLine()) != null) {
@@ -36,7 +35,6 @@ public class WordsUrlFinder {
           outPut.write("Word = " + word + "\n");
         }
         //    We don't need close streams, because use try-with-resources. Java 7 and above
-      }
     }
   }
 }
