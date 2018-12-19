@@ -8,15 +8,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordsUrlFinder {
-  public static final Pattern WORD_PATTERN = Pattern.compile("\\w+[а-яА-Я]", Pattern.UNICODE_CHARACTER_CLASS | Pattern.UNICODE_CHARACTER_CLASS);
+  private static final String filePath = "E:\\Sample3.txt";
+  private static final String pageAddress = "https://habr.com/post/190548/";
+  private static final Pattern WORD_PATTERN = Pattern.compile("\\w+[а-яА-Я]", Pattern.UNICODE_CHARACTER_CLASS | Pattern.UNICODE_CHARACTER_CLASS);
 
   public static void main(String[] args) throws IOException {
     // create Strims and StringBuilder
     StringBuilder sb = new StringBuilder();
     try
-            (BufferedReader inPut = new BufferedReader(new InputStreamReader(new URL("https://habr.com/post/190548/").openStream()))) {
+            (BufferedReader inPut = new BufferedReader(new InputStreamReader(new URL(pageAddress).openStream()))) {
       try
-              (BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("E:\\Sample3.txt"))))) {
+              (BufferedWriter outPut = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(filePath))))) {
         String note;
         //    Write Stream
         while ((note = inPut.readLine()) != null) {
